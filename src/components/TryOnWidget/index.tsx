@@ -1,17 +1,26 @@
 import React from 'react';
 import {
   WidgetContainer,
+  Rectangle,
   Title,
+  BrandImage,
+  Description,
   TryOnButton
-} from './styles';
+} from '@styles/TryOnWidget';
 import History from './History';
 import ModelView from './ModelView';
 
 const TryOnWidget: React.FC = () => {
   return (
     <WidgetContainer>
-      <Title>MUSINSA × 8Fit</Title>
-      <div>모델의 옷을 클릭해 직접 입어보세요.</div>
+      <Rectangle />
+      <Title>
+        <BrandImage 
+          src="/images/brands/musinsa.png" 
+        />
+        × 8Fit
+      </Title>
+      <Description>온라인에서도 옷을 직접 입어보세요</Description>
       
       <ModelView />
       <History />

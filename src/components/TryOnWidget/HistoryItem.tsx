@@ -1,6 +1,6 @@
 import React from 'react';
-import { ModelItem } from '../../types/model';  // 경로 수정
-import { HistoryItem as StyledHistoryItem, EmptyHistoryItem } from './styles';
+import { ModelItem } from '@/types/model';  // 경로 수정
+import { StyledHistoryImage, EmptyHistoryItem, HistoryItemWrapper } from '@styles/TryOnWidget';
 
 interface HistoryItemProps {
   item?: ModelItem;
@@ -9,16 +9,22 @@ interface HistoryItemProps {
 
 const HistoryItem: React.FC<HistoryItemProps> = ({ item, onClick }) => {
   if (!item) {
-    return <EmptyHistoryItem />;
+    return (
+      <HistoryItemWrapper>
+        <EmptyHistoryItem />
+      </HistoryItemWrapper>
+    );
   }
 
   return (
-    <StyledHistoryItem
-      src={item.imageUrl} // 이미 imageUrl 사용 중이므로 수정 불필요
-      alt={item.name}
-      onClick={() => onClick?.(item)}
-    />
+    <HistoryItemWrapper onClick={() => onClick?.(item)}>
+      <StyledHistoryImage
+        src={item.itemimageUrl}
+      />
+    </HistoryItemWrapper>
   );
 };
 
 export default HistoryItem;
+
+

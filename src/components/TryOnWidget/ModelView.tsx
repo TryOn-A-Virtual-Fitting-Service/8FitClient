@@ -1,14 +1,15 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { currentModelState } from '../../recoil/atoms';
-import { ModelViewContainer } from './styles';
+import { currentModelState } from '@/recoil/atoms';
+import { ModelViewContainer, ModelBackground, ModelImage } from '@styles/TryOnWidget';
 
 const ModelView: React.FC = () => {
   const currentModel = useRecoilValue(currentModelState);
 
   return (
     <ModelViewContainer>
-      <img src={currentModel.modelImageUrl} alt="Current model" />
+    <ModelBackground />
+    <ModelImage src={currentModel?.modelImageUrl} alt="model" />
     </ModelViewContainer>
   );
 };
