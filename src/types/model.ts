@@ -1,7 +1,6 @@
 export interface ModelItem {
     id: number;
-    imageUrl: string;
-    name: string;
+    itemimageUrl: string;
     modelImageUrl: string;
   }
   
