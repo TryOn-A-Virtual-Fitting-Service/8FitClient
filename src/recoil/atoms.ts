@@ -7,7 +7,7 @@ export const currentModelState = atom<ModelItem>({
   default: {
     id: 0,  // 기본값은 0으로 설정
     itemImageUrl: '',  // 아이템 이미지는 없음
-    modelImageUrl: '/images/models/default-model.png',  // 기본 모델 이미지
+    modelImageUrl: '/images/models/default-male.png', // 기본 남성 모델
   }
 });
 
