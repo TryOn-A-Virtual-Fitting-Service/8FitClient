@@ -1,29 +1,35 @@
 import styled from 'styled-components';
 
 export const ModelViewContainer = styled.div`
-  width: 44%;
-  margin: 8px auto 10px;
-  aspect-ratio: 3/4;
-  flex-shrink: 0;  // 크기 고정
+  width: 60%;
+  margin: 34px auto 10px;
+  height: 302px;  // aspect-ratio 대신 고정 높이 사용
+  flex-shrink: 0;
   position: relative;
+  display: flex;  // Flexbox 추가
+  justify-content: center;  // 수평 중앙 정렬
+  align-items: flex-end;  // 하단 정렬
 `;
 
 export const ModelBackground = styled.div`
-  position: absolute;  // 절대 위치
-  bottom: 0;          // 바닥에 맞춤
-  left: 50%;          // 가운데 정렬을 위한 설정
-  transform: translateX(-50%);  // 정확한 가운데 정렬
-  width: 266px;
+  position: absolute;
+  top: 0;  // bottom 대신 top으로 변경
+  left: 50%;
+  transform: translateX(-50%);
+  width: 254px;
   height: 302px;
   background-color: #F5F5F5;
   border-radius: 10px;
-  z-index: 0;         // 이미지 뒤에 위치
+  z-index: 0;
 `;
 
 export const ModelImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: relative;  // 배경보다 위에 위치
+  position: absolute;
+  bottom: 0;  // 하단에 고정
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;  // 너비는 자동으로
+  height: 334px;  // 고정 높이 설정
+  object-fit: contain;
   z-index: 1;
 `;
