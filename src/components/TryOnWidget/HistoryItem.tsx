@@ -19,7 +19,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ item, onClick }) => {
   return (
     <HistoryItemWrapper onClick={() => onClick?.(item)}>
       <StyledHistoryImage
-        src={item.itemimageUrl}
+        src={item.itemImageUrl}
       />
     </HistoryItemWrapper>
   );
