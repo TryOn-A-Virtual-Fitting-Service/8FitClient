@@ -14,3 +14,7 @@ export interface ApiResponse<T> {
     itemImageUrl: string;
     modelImageUrl: string;
   }
+
+  export interface TryOnResult {
+    resultImageUrl: string;
+}
