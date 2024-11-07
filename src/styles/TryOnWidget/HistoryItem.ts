@@ -38,4 +38,5 @@ export const EmptyHistoryItem = styled.div`
   aspect-ratio: 1;
   border: 1px solid #eee;
   background-color: #fafafa;
+  border-radius: 4px;
 `;

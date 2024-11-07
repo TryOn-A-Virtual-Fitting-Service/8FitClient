@@ -9,27 +9,28 @@ export const ModelViewContainer = styled.div`
   display: flex;  // Flexbox 추가
   justify-content: center;  // 수평 중앙 정렬
   align-items: flex-end;  // 하단 정렬
+  z-index: 1;
 `;
 
 export const ModelBackground = styled.div`
   position: absolute;
-  top: 0;  // bottom 대신 top으로 변경
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 254px;
   height: 302px;
   background-color: #F5F5F5;
   border-radius: 10px;
-  z-index: 0;
+  z-index: 1;
 `;
 
 export const ModelImage = styled.img`
   position: absolute;
-  bottom: 0;  // 하단에 고정
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: auto;  // 너비는 자동으로
-  height: 334px;  // 고정 높이 설정
+  width: auto;
+  height: 334px;
   object-fit: contain;
-  z-index: 1;
+  z-index: 2;  // ModelBackground보다 높게
 `;
