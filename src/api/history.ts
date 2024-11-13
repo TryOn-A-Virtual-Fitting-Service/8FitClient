@@ -5,8 +5,9 @@ import { ApiResponse, WidgetData } from '@/types';
 
 export const fetchHistory = async (deviceId: string = import.meta.env.VITE_DEVICE_ID): Promise<ApiResponse<WidgetData>> => {
   try {
-    // ${API_URL} 대신 proxy 경로인 /api 사용
-    const response = await axios.get<ApiResponse<WidgetData>>(`/api/widget/${deviceId}`);
+    // ${API_URL} 대신 proxy 경로인 /api 사용  
+    const response = await axios.get<ApiResponse<WidgetData>>(`api/widget/${deviceId}`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('History fetch error:', error);

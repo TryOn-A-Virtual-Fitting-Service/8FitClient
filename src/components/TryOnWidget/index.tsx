@@ -27,7 +27,7 @@ const TryOnWidget: React.FC = () => {
   useEffect(() => {
     const loadHistory = async () => {
       try {
-        const deviceId = 'validDeviceId122';
+        const deviceId = import.meta.env.VITE_DEVICE_ID;
         const response = await fetchHistory(deviceId);
 
         const modelItems = response.result.models.map((model) => ({

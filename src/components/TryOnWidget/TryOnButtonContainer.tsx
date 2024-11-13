@@ -28,7 +28,7 @@ const TryOnButtonContainer: React.FC = () => {
       });
 
       const response = await requestTryOn(
-        'validDeviceId122',
+        import.meta.env.VITE_DEVICE_ID,
         modelImageFile,
         itemImageFile
       );
