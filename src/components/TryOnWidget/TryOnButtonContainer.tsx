@@ -60,7 +60,7 @@ const TryOnButtonContainer: React.FC = () => {
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
       >
-        {isUploading ? '처리중...' : '상의 입어보기'}
+        {isUploading ? '처리중...' : '입어보기'}
       </StyledButton>
     </>
   );
