@@ -5,9 +5,10 @@ import { StyledHistoryImage, EmptyHistoryItem, HistoryItemWrapper } from '@style
 interface HistoryItemProps {
   item?: ModelItem;
   onClick?: (item: ModelItem) => void;
+  isActive?: boolean;
 }
 
-const HistoryItem: React.FC<HistoryItemProps> = ({ item, onClick }) => {
+const HistoryItem: React.FC<HistoryItemProps> = ({ item, onClick, isActive }) => {
   if (!item) {
     return (
       <HistoryItemWrapper>
@@ -20,6 +21,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ item, onClick }) => {
     <HistoryItemWrapper onClick={() => onClick?.(item)}>
       <StyledHistoryImage
         src={item.itemImageUrl}
+        $isActive={isActive}
       />
     </HistoryItemWrapper>
   );

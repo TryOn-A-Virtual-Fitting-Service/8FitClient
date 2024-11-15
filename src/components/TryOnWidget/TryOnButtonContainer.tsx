@@ -1,27 +1,31 @@
 import React, { useRef, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { selectedModelState, currentModelState, historyState } from '@/recoil/atoms';
+import { useRecoilState } from 'recoil';
+import { currentModelState, historyState } from '@/recoil/atoms';
 import { requestTryOn } from '@/api/tryOn';
 import FileUpload from './FileUpload';
 import { TryOnButton as StyledButton } from '@styles/TryOnWidget';
 
 const TryOnButtonContainer: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const selectedModel = useRecoilValue(selectedModelState);
-  const setCurrentModel = useSetRecoilState(currentModelState);
-  const setHistory = useSetRecoilState(historyState);
+  const [currentModel, setCurrentModel] = useRecoilState(currentModelState);
+  const [history, setHistory] = useRecoilState(historyState);
   const [isUploading, setIsUploading] = useState(false);
 
   const handleFileSelect = async (itemImageFile: File) => {
     try {
+      if (!currentModel) {
+        console.error('No model selected');
+        return;
+      }
+
       setIsUploading(true);
 
-      // 선택된 모델에 따라 기본 이미지 파일 생성
-      const modelImageResponse = await fetch(
-        selectedModel === 'male'
-          ? '/images/models/default-male.png'
-          : '/images/models/default-female.png'
-      );
+      // 현재 모델의 이미지 URL을 File로 변환
+      const modelImageResponse = await fetch(currentModel.modelImageUrl);
+      if (!modelImageResponse.ok) {
+        throw new Error(`Failed to fetch model image: ${modelImageResponse.statusText}`);
+      }
+
       const modelImageBlob = await modelImageResponse.blob();
       const modelImageFile = new File([modelImageBlob], 'model.png', {
         type: 'image/png',
@@ -33,16 +37,19 @@ const TryOnButtonContainer: React.FC = () => {
         itemImageFile
       );
 
-      // 결과 이미지로 현재 모델과 히스토리 업데이트
       if (response.success) {
-        const newModel = {
-          id: Date.now(), // 임시 ID로 타임스탬프 사용
-          itemImageUrl: URL.createObjectURL(itemImageFile), // 로컬 URL 생성
+        const updatedModel = {
+          ...currentModel,
           modelImageUrl: response.result.resultImageUrl,
+          itemImageUrl: response.result.resultImageUrl
         };
 
-        setCurrentModel(newModel);
-        setHistory(prev => [newModel, ...prev]); // 히스토리 맨 앞에 추가
+        setCurrentModel(updatedModel);
+        
+        const updatedHistory = history.map(item => 
+          item.id === currentModel.id ? updatedModel : item
+        );
+        setHistory(updatedHistory);
       } else {
         console.error('Try-on request failed:', response.message);
       }
@@ -50,6 +57,10 @@ const TryOnButtonContainer: React.FC = () => {
       console.error('Try-on failed:', error);
     } finally {
       setIsUploading(false);
+      // 파일 input 초기화 추가
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -58,7 +69,7 @@ const TryOnButtonContainer: React.FC = () => {
       <FileUpload ref={fileInputRef} onFileSelect={handleFileSelect} />
       <StyledButton
         onClick={() => fileInputRef.current?.click()}
-        disabled={isUploading}
+        disabled={isUploading || !currentModel}
       >
         {isUploading ? '처리중...' : '입어보기'}
       </StyledButton>

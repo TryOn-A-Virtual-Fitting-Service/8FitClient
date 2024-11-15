@@ -18,6 +18,7 @@ export const SelectorButton = styled.button`
   border-radius: 4px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   cursor: pointer;
   font-size: 12px;
