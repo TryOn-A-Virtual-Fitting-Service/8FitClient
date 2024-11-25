@@ -1,6 +1,10 @@
 import React from 'react';
-import { ModelItem } from '@/types/model';  // 경로 수정
-import { StyledHistoryImage, EmptyHistoryItem, HistoryItemWrapper } from '@styles/TryOnWidget';
+import { ModelItem } from '@/types/model'; // 경로 수정
+import {
+  StyledHistoryImage,
+  EmptyHistoryItem,
+  HistoryItemWrapper,
+} from '@styles/TryOnWidget';
 
 interface HistoryItemProps {
   item?: ModelItem;
@@ -8,7 +12,11 @@ interface HistoryItemProps {
   isActive?: boolean;
 }
 
-const HistoryItem: React.FC<HistoryItemProps> = ({ item, onClick, isActive }) => {
+const HistoryItem: React.FC<HistoryItemProps> = ({
+  item,
+  onClick,
+  isActive,
+}) => {
   if (!item) {
     return (
       <HistoryItemWrapper>
@@ -19,14 +27,9 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ item, onClick, isActive }) =>
 
   return (
     <HistoryItemWrapper onClick={() => onClick?.(item)}>
-      <StyledHistoryImage
-        src={item.itemImageUrl}
-        $isActive={isActive}
-      />
+      <StyledHistoryImage src={item.modelImageUrl} $isActive={isActive} />
     </HistoryItemWrapper>
   );
 };
 
 export default HistoryItem;
-
-

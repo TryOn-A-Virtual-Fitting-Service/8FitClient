@@ -32,8 +32,13 @@ const TryOnWidget: React.FC = () => {
 
         const modelItems = response.result.models.map((model) => ({
           id: model.modelId,
-          itemImageUrl: model.itemImageUrl,
+          itemImageUrl: model.fittings[0]?.itemImageUrl || '', // 첫 번째 fitting의 itemImageUrl
           modelImageUrl: model.modelImageUrl,
+          fittings: model.fittings.map((fitting) => ({
+            fittingId: fitting.fittingId,
+            fittingImageUrl: fitting.fittingImageUrl,
+            itemImageUrl: fitting.itemImageUrl,
+          })),
         }));
 
         setHistory(modelItems);
@@ -45,11 +50,18 @@ const TryOnWidget: React.FC = () => {
           // 선택된 모델 타입에 따라 기본 모델 설정
           setCurrentModel({
             id: 0,
-            itemImageUrl: '',
             modelImageUrl:
               selectedModel === 'male'
                 ? '/images/models/default-male.png'
                 : '/images/models/default-female.png',
+            fittings: [
+              {
+                // 기본 fitting 추가
+                fittingId: 0,
+                fittingImageUrl: '',
+                itemImageUrl: '',
+              },
+            ],
           });
         }
       } catch (error) {
@@ -57,11 +69,17 @@ const TryOnWidget: React.FC = () => {
         // 에러 발생시에도 기본 모델 설정
         setCurrentModel({
           id: 0,
-          itemImageUrl: '',
           modelImageUrl:
             selectedModel === 'male'
               ? '/images/models/default-male.png'
               : '/images/models/default-female.png',
+          fittings: [
+            {
+              fittingId: 0,
+              fittingImageUrl: '',
+              itemImageUrl: '',
+            },
+          ],
         });
       }
     };
