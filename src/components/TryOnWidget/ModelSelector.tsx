@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';  // useRef 추가
+import React, { useRef } from 'react'; // useRef 추가
 import { useRecoilState } from 'recoil';
 import { historyState, currentModelState } from '@/recoil/atoms';
-import { requestAddModel } from '@/api/model';  // API 함수 import
-import FileUpload from './FileUpload';  // FileUpload 컴포넌트 import
+import { requestAddModel } from '@/api/model'; // API 함수 import
+import FileUpload from './FileUpload'; // FileUpload 컴포넌트 import
 import {
   SelectorContainer,
   SelectorButton,
@@ -26,17 +26,25 @@ const ModelSelector: React.FC = () => {
       }
 
       // 로컬 이미지 URL 사용
-      const imageUrl = modelType === 'male' 
-        ? '/images/models/default-male.png'
-        : '/images/models/default-female.png';
-      
+      const imageUrl =
+        modelType === 'male'
+          ? '/images/models/default-male.png'
+          : '/images/models/default-female.png';
+
       // 먼저 UI 업데이트
       const newModel = {
         id: Date.now(),
-        itemImageUrl: imageUrl,
         modelImageUrl: imageUrl,
+        fittings: [
+          {
+            // fittings 배열 추가
+            fittingId: Date.now(),
+            fittingImageUrl: '',
+            itemImageUrl: imageUrl,
+          },
+        ],
       };
-      
+
       setHistory([newModel, ...history]);
       setCurrentModel(newModel);
       setIsOpen(false);
@@ -46,10 +54,7 @@ const ModelSelector: React.FC = () => {
       const blob = await response.blob();
       const modelImage = new File([blob], 'model.png', { type: 'image/png' });
 
-      await requestAddModel(
-        import.meta.env.VITE_DEVICE_ID,
-        modelImage
-      );
+      await requestAddModel(import.meta.env.VITE_DEVICE_ID, modelImage);
     } catch (error) {
       console.error('Failed to add model:', error);
     }
@@ -66,8 +71,8 @@ const ModelSelector: React.FC = () => {
       if (response.success) {
         const newModel = {
           id: Date.now(),
-          itemImageUrl: response.result.modelUrl,    // 서버 응답 URL 사용
-          modelImageUrl: response.result.modelUrl,   // 서버 응답 URL 사용
+          itemImageUrl: response.result.modelUrl, // 서버 응답 URL 사용
+          modelImageUrl: response.result.modelUrl, // 서버 응답 URL 사용
         };
 
         setHistory([newModel, ...history]);
