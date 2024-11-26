@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ApiResponse } from '@/types';
 
 interface AddModelResponse {
+  modelId: number;
   modelUrl: string;
 }
 
@@ -11,7 +12,7 @@ export const requestAddModel = async (
 ): Promise<ApiResponse<AddModelResponse>> => {
   try {
     const formData = new FormData();
-    formData.append('image', modelImage);  // 키를 'Image'로 설정
+    formData.append('image', modelImage); // 키를 'Image'로 설정
 
     const response = await axios.post<ApiResponse<AddModelResponse>>(
       `/api/widget/${deviceId}/model`,

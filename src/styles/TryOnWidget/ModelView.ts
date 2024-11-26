@@ -3,12 +3,12 @@ import styled from 'styled-components';
 export const ModelViewContainer = styled.div`
   width: 60%;
   margin: 34px auto 10px;
-  height: 302px;  // aspect-ratio 대신 고정 높이 사용
+  height: 302px; // aspect-ratio 대신 고정 높이 사용
   flex-shrink: 0;
   position: relative;
-  display: flex;  // Flexbox 추가
-  justify-content: center;  // 수평 중앙 정렬
-  align-items: flex-end;  // 하단 정렬
+  display: flex; // Flexbox 추가
+  justify-content: center; // 수평 중앙 정렬
+  align-items: flex-end; // 하단 정렬
   z-index: 1;
 `;
 
@@ -19,7 +19,7 @@ export const ModelBackground = styled.div`
   transform: translateX(-50%);
   width: 254px;
   height: 302px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
   z-index: 1;
 `;
@@ -30,7 +30,8 @@ export const ModelImage = styled.img`
   left: 50%;
   transform: translateX(-50%);
   width: auto;
+  max-width: 254px;
   height: 334px;
   object-fit: contain;
-  z-index: 2;  // ModelBackground보다 높게
+  z-index: 2; // ModelBackground보다 높게
 `;
