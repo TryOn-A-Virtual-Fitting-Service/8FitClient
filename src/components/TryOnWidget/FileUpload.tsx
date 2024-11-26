@@ -16,8 +16,8 @@ const FileUpload = forwardRef<HTMLInputElement, FileUploadProps>(
     return (
       <input
         ref={ref}
-        type="file"
-        accept="image/*"
+        type='file'
+        accept='image/*'
         onChange={handleFileChange}
         style={{ display: 'none' }}
       />

@@ -20,20 +20,9 @@ const TryOnButtonContainer: React.FC = () => {
 
       setIsUploading(true);
 
-      // 현재 모델의 이미지 URL을 File로 변환
-      const modelImageResponse = await fetch(currentModel.modelImageUrl);
-      if (!modelImageResponse.ok) {
-        throw new Error(`Failed to fetch model image: ${modelImageResponse.statusText}`);
-      }
-
-      const modelImageBlob = await modelImageResponse.blob();
-      const modelImageFile = new File([modelImageBlob], 'model.png', {
-        type: 'image/png',
-      });
-
       const response = await requestTryOn(
         import.meta.env.VITE_DEVICE_ID,
-        modelImageFile,
+        currentModel.id, // modelId 전달
         itemImageFile
       );
 
@@ -41,12 +30,12 @@ const TryOnButtonContainer: React.FC = () => {
         const updatedModel = {
           ...currentModel,
           modelImageUrl: response.result.resultImageUrl,
-          itemImageUrl: response.result.resultImageUrl
+          itemImageUrl: response.result.resultImageUrl,
         };
 
         setCurrentModel(updatedModel);
-        
-        const updatedHistory = history.map(item => 
+
+        const updatedHistory = history.map((item) =>
           item.id === currentModel.id ? updatedModel : item
         );
         setHistory(updatedHistory);
@@ -57,7 +46,6 @@ const TryOnButtonContainer: React.FC = () => {
       console.error('Try-on failed:', error);
     } finally {
       setIsUploading(false);
-      // 파일 input 초기화 추가
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
