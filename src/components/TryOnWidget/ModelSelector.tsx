@@ -11,6 +11,7 @@ import {
   ModelSelectorWrapper,
 } from '@styles/TryOnWidget';
 import { ArrowIcon } from '@components/common/Icons';
+import { ModelItem } from '@/types/model';
 
 const ModelSelector: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -69,10 +70,10 @@ const ModelSelector: React.FC = () => {
       );
 
       if (response.success) {
-        const newModel = {
-          id: Date.now(),
-          itemImageUrl: response.result.modelUrl, // 서버 응답 URL 사용
-          modelImageUrl: response.result.modelUrl, // 서버 응답 URL 사용
+        const newModel: ModelItem = {
+          id: response.result.modelId,
+          modelImageUrl: response.result.modelUrl,
+          fittings: [], // 새 모델이니 빈 배열로 초기화
         };
 
         setHistory([newModel, ...history]);
