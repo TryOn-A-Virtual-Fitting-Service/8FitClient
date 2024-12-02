@@ -2,11 +2,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
   build: {
     rollupOptions: {
-      input: "src/content/content.tsx",
+      input:
+        command === "serve"
+          ? "index.html" // 개발 시
+          : "src/content/content.tsx", // 빌드 시
       output: {
         entryFileNames: "content.js",
       },
@@ -20,4 +23,4 @@ export default defineConfig({
       "@api": path.resolve(__dirname, "./src/api"),
     },
   },
-});
+}));
