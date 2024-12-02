@@ -21,7 +21,7 @@ const History: React.FC = () => {
 
   return (
     <HistoryWrapper>
-      <HistoryTitle>내 모델</HistoryTitle>
+      <HistoryTitle>내 모델 리스트</HistoryTitle>
       <HistoryContainer>
         {items.map((item, index) => (
           <HistoryItem
