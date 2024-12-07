@@ -8,6 +8,15 @@ const mountNode = document.createElement("div");
 mountNode.id = "eight-fit-widget-root";
 document.body.appendChild(mountNode);
 
+const hideElement = () => {
+  const element = document.querySelector(
+    ".gtm-impression-popup._qr_1g9ok_1"
+  ) as HTMLElement;
+  if (element) {
+    element.style.display = "none";
+  }
+};
+
 // 스타일 적용 (기존 App.css와 index.css의 필요한 스타일만 적용)
 mountNode.style.cssText = `
   position: fixed;
@@ -18,6 +27,7 @@ mountNode.style.cssText = `
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  margin-bottom: 190px;
 `;
 
 // React 앱 마운트
@@ -29,3 +39,5 @@ root.render(
     </RecoilRoot>
   </React.StrictMode>
 );
+
+hideElement();
