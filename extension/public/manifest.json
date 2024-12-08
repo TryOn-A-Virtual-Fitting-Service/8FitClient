@@ -3,13 +3,18 @@
   "name": "8Fit Virtual Fitting",
   "version": "1.0.0",
   "description": "Try clothes before you buy on Musinsa",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "tabs"],
+  "host_permissions": ["<all_urls>"],
   "content_scripts": [
     {
       "matches": ["https://www.musinsa.com/*"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "css": ["styles/fonts.css"]
     }
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
