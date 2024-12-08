@@ -17,7 +17,11 @@ import History from "./History";
 import ModelView from "./ModelView";
 import { fetchHistory } from "@/api/history"; // API 함수 import 추가
 
-const TryOnWidget: React.FC = () => {
+interface TryOnWidgetProps {
+  screenCaptureStart: () => void; // 추가
+}
+
+const TryOnWidget: React.FC<TryOnWidgetProps> = ({ screenCaptureStart }) => {
   // Recoil setter 추가
   const setHistory = useSetRecoilState(historyState);
   const setCurrentModel = useSetRecoilState(currentModelState);
@@ -101,7 +105,7 @@ const TryOnWidget: React.FC = () => {
       <Description>온라인에서도 옷을 직접 입어보세요</Description>
       <ModelView />
       <History />
-      <TryOnButtonContainer />
+      <TryOnButtonContainer onStartCapture={screenCaptureStart} />
     </WidgetContainer>
   );
 };

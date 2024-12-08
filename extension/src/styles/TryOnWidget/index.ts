@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const WidgetContainer = styled.div`
   position: relative;
   box-sizing: border-box; // padding과 border를 width에 포함
   width: 300px; // 100% 대신 고정 너비 사용
-  height: 584px; // 100% 대신 고정 높이 사용
+  height: 594px; // 100% 대신 고정 높이 사용
   padding: 22px;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@ export const WidgetContainer = styled.div`
   background-color: white;
   border-radius: 12px;
   border: 1px solid #e5e5e5;
-  z-index: 0;  // 기본 z-index
+  z-index: 0; // 기본 z-index
 `;
 
 export const Title = styled.h1`
@@ -67,7 +67,7 @@ export const TryOnButton = styled.button`
   }
 `;
 
-export * from './ModelView';
-export * from './History';
-export * from './HistoryItem';
-export * from './ModelSelecter';
+export * from "./ModelView";
+export * from "./History";
+export * from "./HistoryItem";
+export * from "./ModelSelecter";

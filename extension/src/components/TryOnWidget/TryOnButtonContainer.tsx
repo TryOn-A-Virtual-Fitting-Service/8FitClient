@@ -1,11 +1,17 @@
-import React, { useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { currentModelState, historyState } from '@/recoil/atoms';
-import { requestTryOn } from '@/api/tryOn';
-import FileUpload from './FileUpload';
-import { TryOnButton as StyledButton } from '@styles/TryOnWidget';
+import React, { useRef, useState } from "react";
+import { useRecoilState } from "recoil";
+import { currentModelState, historyState } from "@/recoil/atoms";
+import { requestTryOn } from "@/api/tryOn";
+import FileUpload from "./FileUpload";
+import { TryOnButton as StyledButton } from "@styles/TryOnWidget";
 
-const TryOnButtonContainer: React.FC = () => {
+interface TryOnButtonContainerProps {
+  onStartCapture: () => void; // 추가
+}
+
+const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
+  onStartCapture,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentModel, setCurrentModel] = useRecoilState(currentModelState);
   const [history, setHistory] = useRecoilState(historyState);
@@ -14,7 +20,7 @@ const TryOnButtonContainer: React.FC = () => {
   const handleFileSelect = async (itemImageFile: File) => {
     try {
       if (!currentModel) {
-        console.error('No model selected');
+        console.error("No model selected");
         return;
       }
 
@@ -40,14 +46,14 @@ const TryOnButtonContainer: React.FC = () => {
         );
         setHistory(updatedHistory);
       } else {
-        console.error('Try-on request failed:', response.message);
+        console.error("Try-on request failed:", response.message);
       }
     } catch (error) {
-      console.error('Try-on failed:', error);
+      console.error("Try-on failed:", error);
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -56,10 +62,10 @@ const TryOnButtonContainer: React.FC = () => {
     <>
       <FileUpload ref={fileInputRef} onFileSelect={handleFileSelect} />
       <StyledButton
-        onClick={() => fileInputRef.current?.click()}
+        onClick={onStartCapture}
         disabled={isUploading || !currentModel}
       >
-        {isUploading ? '처리중...' : '입어보기'}
+        {isUploading ? "처리중..." : "입어보기"}
       </StyledButton>
     </>
   );
