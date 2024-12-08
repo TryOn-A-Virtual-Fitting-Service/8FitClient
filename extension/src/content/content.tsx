@@ -50,13 +50,23 @@ guideMessage.style.width = "fit-content";
 guideMessage.style.minWidth = "max-content";
 guideMessage.style.whiteSpace = "nowrap";
 guideMessage.style.display = "none";
+guideMessage.style.transition = "opacity 0.2s ease"; // 부드러운 전환 효과 추가
+
+guideMessage.addEventListener("mouseover", () => {
+  guideMessage.style.opacity = "0.2";
+});
+
+guideMessage.addEventListener("mouseout", () => {
+  guideMessage.style.opacity = "1";
+});
+
 captureContainer.appendChild(guideMessage);
 
 // Selection area
 const selectionArea = document.createElement("div");
 selectionArea.id = "selection-area";
 selectionArea.style.position = "absolute";
-selectionArea.style.border = "2px dashed #ffffff";
+selectionArea.style.border = "none";
 selectionArea.style.backgroundColor = "transparent";
 selectionArea.style.display = "none";
 selectionArea.style.zIndex = "9999";
@@ -89,18 +99,41 @@ document.head.appendChild(widgetStyles);
 const createModal = (imageUrl: string) => {
   const modal = document.createElement("div");
   modal.style.position = "fixed";
-  modal.style.top = "50%";
+  modal.style.top = "36%";
   modal.style.left = "50%";
   modal.style.transform = "translate(-50%, -50%)";
   modal.style.backgroundColor = "white";
   modal.style.padding = "24px";
   modal.style.borderRadius = "12px";
-  modal.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+  modal.style.boxShadow = "0 0px 17px rgba(0, 0, 0, 0.17)";
   modal.style.zIndex = "10000";
   modal.style.display = "flex";
   modal.style.flexDirection = "column";
   modal.style.alignItems = "center";
-  modal.style.gap = "16px";
+  modal.style.gap = "22px";
+
+  const textContainer = document.createElement("div");
+  textContainer.style.display = "flex";
+  textContainer.style.flexDirection = "column";
+  textContainer.style.alignItems = "center";
+  textContainer.style.gap = "4px";
+  textContainer.style.marginBottom = "12px";
+
+  const titleText = document.createElement("div");
+  titleText.textContent = "선택하신 옷을 내 모델에 입혀볼까요?";
+  titleText.style.fontFamily = "Pretendard Variable";
+  titleText.style.fontSize = "24px";
+  titleText.style.fontWeight = "700";
+  titleText.style.color = "#222222";
+  titleText.style.letterSpacing = "-0.48px";
+
+  const descriptionText = document.createElement("div");
+  descriptionText.textContent = "상의/하의 의류만 가상 피팅이 가능해요.";
+  descriptionText.style.fontFamily = "Pretendard Variable";
+  descriptionText.style.fontSize = "16px";
+  descriptionText.style.fontWeight = "400";
+  descriptionText.style.color = "#666666";
+  descriptionText.style.letterSpacing = "-0.32px";
 
   // 캡처된 이미지
   const image = document.createElement("img");
@@ -108,25 +141,77 @@ const createModal = (imageUrl: string) => {
   image.style.maxWidth = "400px";
   image.style.maxHeight = "400px";
   image.style.objectFit = "contain";
+  image.style.borderRadius = "10px";
+  image.style.border = "1px solid #c6c6c6";
+
+  // 버튼들을 감싸는 컨테이너
+  const buttonContainer = document.createElement("div");
+  buttonContainer.style.display = "flex";
+  buttonContainer.style.gap = "12px"; // 버튼 사이 간격
+  buttonContainer.style.width = "100%";
 
   // 확인 버튼
   const confirmButton = document.createElement("button");
   confirmButton.textContent = "확인";
+  confirmButton.style.flex = "1";
   confirmButton.style.backgroundColor = "#000";
   confirmButton.style.color = "#fff";
   confirmButton.style.padding = "12px 24px";
   confirmButton.style.border = "none";
-  confirmButton.style.borderRadius = "6px";
+  confirmButton.style.borderRadius = "8px";
   confirmButton.style.cursor = "pointer";
   confirmButton.style.fontFamily = "Pretendard Variable";
-  confirmButton.style.fontSize = "14px";
+  confirmButton.style.fontSize = "16px";
 
-  confirmButton.onclick = () => {
+  // 취소 버튼
+  const cancelButton = document.createElement("button");
+  cancelButton.textContent = "취소";
+  cancelButton.style.flex = "1";
+  cancelButton.style.backgroundColor = "#fff";
+  cancelButton.style.color = "#222222";
+  cancelButton.style.padding = "12px 24px";
+  cancelButton.style.border = "1px solid #e5e5e5";
+  cancelButton.style.borderRadius = "8px";
+  cancelButton.style.cursor = "pointer";
+  cancelButton.style.fontFamily = "Pretendard Variable";
+  cancelButton.style.fontSize = "16px";
+
+  confirmButton.onclick = async () => {
+    try {
+      // Base64 이미지 URL을 Blob으로 변환
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+
+      // Blob을 File 객체로 변환
+      const file = new File([blob], "captured-image.png", {
+        type: "image/png",
+      });
+
+      // TryOnButtonContainer의 handleFileSelect 직접 호출
+      const event = new CustomEvent("file-selected", {
+        detail: { file },
+      });
+      document.dispatchEvent(event);
+    } catch (error) {
+      console.error("Error processing captured image:", error);
+    }
+
     modal.remove();
   };
 
+  cancelButton.onclick = () => {
+    modal.remove();
+  };
+
+  buttonContainer.appendChild(cancelButton);
+  buttonContainer.appendChild(confirmButton);
+
+  textContainer.appendChild(titleText);
+  textContainer.appendChild(descriptionText);
+
   modal.appendChild(image);
-  modal.appendChild(confirmButton);
+  modal.appendChild(textContainer);
+  modal.appendChild(buttonContainer);
   document.body.appendChild(modal);
 };
 
@@ -139,6 +224,7 @@ const startCapture = () => {
 
   captureContainer.style.display = "block";
   captureContainer.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+  captureContainer.style.cursor = "crosshair";
 
   const handleMouseDown = (e: MouseEvent) => {
     guideMessage.style.display = "none";
@@ -212,16 +298,23 @@ const startCapture = () => {
     const rect = selectionArea.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
+    const captureArea = {
+      x: Math.round(rect.left * dpr),
+      y: Math.round(rect.top * dpr),
+      width: Math.round(rect.width * dpr),
+      height: Math.round(rect.height * dpr),
+    };
+
+    if (captureArea.width <= 0 || captureArea.height <= 0) {
+      console.error("Invalid capture area:", captureArea);
+      return;
+    }
+
     try {
       chrome.runtime.sendMessage(
         {
           type: "CAPTURE_VISIBLE_TAB",
-          area: {
-            x: Math.round(rect.left * dpr),
-            y: Math.round(rect.top * dpr),
-            width: Math.round(rect.width * dpr),
-            height: Math.round(rect.height * dpr),
-          },
+          area: captureArea,
         },
         (response) => {
           if (response.imageData) {

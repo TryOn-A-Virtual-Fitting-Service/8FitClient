@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { currentModelState, historyState } from "@/recoil/atoms";
 import { requestTryOn } from "@/api/tryOn";
@@ -17,12 +17,38 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
   const [history, setHistory] = useRecoilState(historyState);
   const [isUploading, setIsUploading] = useState(false);
 
+  useEffect(() => {
+    console.log("TryOnButtonContainer - Current Model:", currentModel);
+  }, [currentModel]);
+
+  useEffect(() => {
+    const handleFileSelected = (event: CustomEvent) => {
+      const file = event.detail.file;
+      handleFileSelect(file);
+    };
+
+    document.addEventListener(
+      "file-selected",
+      handleFileSelected as EventListener
+    );
+
+    return () => {
+      document.removeEventListener(
+        "file-selected",
+        handleFileSelected as EventListener
+      );
+    };
+  }, [currentModel]);
+
   const handleFileSelect = async (itemImageFile: File) => {
     try {
       if (!currentModel) {
         console.error("No model selected");
         return;
       }
+
+      console.log("Current Model before request:", currentModel); // 추가
+      console.log("Current Model ID:", currentModel.id);
 
       setIsUploading(true);
 
