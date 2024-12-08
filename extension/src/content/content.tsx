@@ -211,29 +211,6 @@ const startCapture = () => {
 
     const rect = selectionArea.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
-
-    // 선택 영역의 좌표와 크기 로깅
-    console.log("Selection Area:", {
-      clientRect: {
-        left: rect.left,
-        top: rect.top,
-        width: rect.width,
-        height: rect.height,
-      },
-      scroll: {
-        x: scrollX,
-        y: scrollY,
-      },
-      final: {
-        x: rect.left + scrollX,
-        y: rect.top + scrollY,
-      },
-    });
-
-    // 디바이스 픽셀 비율 로깅
-    console.log("Device Pixel Ratio:", window.devicePixelRatio);
 
     try {
       chrome.runtime.sendMessage(

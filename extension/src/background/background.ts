@@ -3,12 +3,6 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
     const { area } = request;
 
     chrome.tabs.captureVisibleTab({ format: "png" }, (dataUrl) => {
-      console.log("Capture Area:", area);
-      console.log("Canvas Size:", {
-        width: area.width,
-        height: area.height,
-      });
-
       const canvas = new OffscreenCanvas(area.width, area.height);
       const ctx = canvas.getContext("2d");
 
