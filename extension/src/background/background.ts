@@ -9,7 +9,6 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
         height: area.height,
       });
 
-      // Canvas를 사용하여 이미지 크롭
       const canvas = new OffscreenCanvas(area.width, area.height);
       const ctx = canvas.getContext("2d");
 
@@ -18,7 +17,6 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
         return;
       }
 
-      // 비동기로 이미지 로드 및 크롭
       fetch(dataUrl)
         .then((response) => response.blob())
         .then((blob) => createImageBitmap(blob))
@@ -35,7 +33,6 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
             area.height
           );
 
-          // 크롭된 이미지를 데이터 URL로 변환
           canvas.convertToBlob().then((blob) => {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -46,6 +43,6 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
         });
     });
 
-    return true; // 비동기 응답을 위해 true 반환
+    return true;
   }
 });

@@ -210,6 +210,7 @@ const startCapture = () => {
     isDrawing = false;
 
     const rect = selectionArea.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
 
@@ -239,10 +240,10 @@ const startCapture = () => {
         {
           type: "CAPTURE_VISIBLE_TAB",
           area: {
-            x: Math.round(rect.left + scrollX),
-            y: Math.round(rect.top + scrollY),
-            width: Math.round(rect.width),
-            height: Math.round(rect.height),
+            x: Math.round(rect.left * dpr),
+            y: Math.round(rect.top * dpr),
+            width: Math.round(rect.width * dpr),
+            height: Math.round(rect.height * dpr),
           },
         },
         (response) => {
