@@ -12,12 +12,12 @@ export default defineConfig(({ mode, command }) => {
     plugins: [react()],
     build: {
       rollupOptions: {
-        input:
-          command === "serve"
-            ? "index.html" // 개발 시
-            : "src/content/content.tsx", // 빌드 시
+        input: {
+          content: "src/content/content.tsx",
+          background: "src/background/background.ts",
+        },
         output: {
-          entryFileNames: "content.js",
+          entryFileNames: "[name].js",
         },
       },
     },

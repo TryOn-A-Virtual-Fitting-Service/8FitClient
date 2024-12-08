@@ -1,7 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { RecoilRoot } from "recoil";
-import html2canvas from "html2canvas";
 import TryOnWidget from "../components/TryOnWidget";
 
 const captureContainer = document.createElement("div");
@@ -87,6 +86,50 @@ widgetStyles.textContent = `
 `;
 document.head.appendChild(widgetStyles);
 
+const createModal = (imageUrl: string) => {
+  const modal = document.createElement("div");
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%, -50%)";
+  modal.style.backgroundColor = "white";
+  modal.style.padding = "24px";
+  modal.style.borderRadius = "12px";
+  modal.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+  modal.style.zIndex = "10000";
+  modal.style.display = "flex";
+  modal.style.flexDirection = "column";
+  modal.style.alignItems = "center";
+  modal.style.gap = "16px";
+
+  // 캡처된 이미지
+  const image = document.createElement("img");
+  image.src = imageUrl;
+  image.style.maxWidth = "400px";
+  image.style.maxHeight = "400px";
+  image.style.objectFit = "contain";
+
+  // 확인 버튼
+  const confirmButton = document.createElement("button");
+  confirmButton.textContent = "확인";
+  confirmButton.style.backgroundColor = "#000";
+  confirmButton.style.color = "#fff";
+  confirmButton.style.padding = "12px 24px";
+  confirmButton.style.border = "none";
+  confirmButton.style.borderRadius = "6px";
+  confirmButton.style.cursor = "pointer";
+  confirmButton.style.fontFamily = "Pretendard Variable";
+  confirmButton.style.fontSize = "14px";
+
+  confirmButton.onclick = () => {
+    modal.remove();
+  };
+
+  modal.appendChild(image);
+  modal.appendChild(confirmButton);
+  document.body.appendChild(modal);
+};
+
 const startCapture = () => {
   captureContainer.style.display = "block";
   guideMessage.style.display = "block";
@@ -167,18 +210,47 @@ const startCapture = () => {
     isDrawing = false;
 
     const rect = selectionArea.getBoundingClientRect();
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
 
-    try {
-      const canvas = await html2canvas(document.body, {
-        x: rect.left,
-        y: rect.top,
+    // 선택 영역의 좌표와 크기 로깅
+    console.log("Selection Area:", {
+      clientRect: {
+        left: rect.left,
+        top: rect.top,
         width: rect.width,
         height: rect.height,
-        backgroundColor: null,
-      });
+      },
+      scroll: {
+        x: scrollX,
+        y: scrollY,
+      },
+      final: {
+        x: rect.left + scrollX,
+        y: rect.top + scrollY,
+      },
+    });
 
-      const imageData = canvas.toDataURL("image/png");
-      console.log("Captured image:", imageData);
+    // 디바이스 픽셀 비율 로깅
+    console.log("Device Pixel Ratio:", window.devicePixelRatio);
+
+    try {
+      chrome.runtime.sendMessage(
+        {
+          type: "CAPTURE_VISIBLE_TAB",
+          area: {
+            x: Math.round(rect.left + scrollX),
+            y: Math.round(rect.top + scrollY),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height),
+          },
+        },
+        (response) => {
+          if (response.imageData) {
+            createModal(response.imageData);
+          }
+        }
+      );
     } catch (error) {
       console.error("Capture failed:", error);
     }
