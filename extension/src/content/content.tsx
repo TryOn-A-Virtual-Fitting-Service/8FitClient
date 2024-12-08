@@ -111,6 +111,7 @@ const createModal = (imageUrl: string) => {
   modal.style.flexDirection = "column";
   modal.style.alignItems = "center";
   modal.style.gap = "22px";
+  modal.style.minWidth = "500px";
 
   const textContainer = document.createElement("div");
   textContainer.style.display = "flex";
