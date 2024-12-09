@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { requestSizeAnalysis } from "@/api/size";
 import { useRecoilValue } from "recoil";
 import { currentModelState } from "@/recoil/atoms";
+import { preprocessHtmlString } from "@/utils/htmlProcessor";
 
 const SizeAnalysis = () => {
   const [sizeChartHTML, setSizeChartHTML] = useState<string | null>(null);
@@ -11,16 +12,17 @@ const SizeAnalysis = () => {
 
   useEffect(() => {
     const handleSizeChart = async (event: CustomEvent) => {
-      const html = event.detail.sizeChart;
-      setSizeChartHTML(html);
+      const rawHtml = event.detail.sizeChart;
+      const processedHtml = preprocessHtmlString(rawHtml);
+      setSizeChartHTML(processedHtml);
       setIsLoading(true);
 
       try {
         // API 호출 및 SSE 연결
         const eventSource = await requestSizeAnalysis(
-          html,
-          import.meta.env.VITE_DEVICE_ID, // 실제 deviceId로 교체 필요
-          currentModel.id // 실제 modelId로 교체 필요
+          processedHtml,
+          import.meta.env.VITE_DEVICE_ID,
+          currentModel.id
         );
 
         eventSource.onmessage = (event) => {

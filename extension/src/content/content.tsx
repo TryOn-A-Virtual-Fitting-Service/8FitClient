@@ -188,21 +188,26 @@ const createModal = (imageUrl: string) => {
         type: "image/png",
       });
 
-      const sizeChart = document.querySelector(".sc-mzs975-0.fTWOpQ");
-      if (sizeChart) {
-        const sizeChartHTML = sizeChart.outerHTML;
-        // 두 개의 이벤트를 순차적으로 발생
+      if (file) {
         document.dispatchEvent(
           new CustomEvent("file-selected", {
             detail: { file },
           })
         );
+      } else {
+        console.error("No file created from captured image");
+      }
 
+      const sizeChart = document.querySelector(".sc-mzs975-0.fTWOpQ");
+      if (sizeChart) {
+        const sizeChartHTML = sizeChart.outerHTML;
         document.dispatchEvent(
           new CustomEvent("size-chart-selected", {
             detail: { sizeChart: sizeChartHTML },
           })
         );
+      } else {
+        console.error("No size chart created from html");
       }
     } catch (error) {
       console.error("Error processing:", error);

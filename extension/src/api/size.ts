@@ -8,13 +8,15 @@ export const requestSizeAnalysis = async (
   modelId: number
 ): Promise<EventSource> => {
   // 초기 POST 요청
-  await axios.post(`${API_URL}/api/v1/chat/size`, {
+  await axios.post(`${API_URL}/chat/size`, {
     content,
     deviceId,
     modelId,
   });
 
   // SSE 연결 설정
-  const eventSource = new EventSource(`${API_URL}/api/v1/chat/size`);
+  const eventSource = new EventSource(`${API_URL}/api/v1/chat/size`, {
+    withCredentials: true,
+  });
   return eventSource;
 };
