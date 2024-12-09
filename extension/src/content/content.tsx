@@ -188,13 +188,29 @@ const createModal = (imageUrl: string) => {
         type: "image/png",
       });
 
-      // TryOnButtonContainer의 handleFileSelect 직접 호출
-      const event = new CustomEvent("file-selected", {
-        detail: { file },
-      });
-      document.dispatchEvent(event);
+      if (file) {
+        document.dispatchEvent(
+          new CustomEvent("file-selected", {
+            detail: { file },
+          })
+        );
+      } else {
+        console.error("No file created from captured image");
+      }
+
+      const sizeChart = document.querySelector(".sc-mzs975-0.fTWOpQ");
+      if (sizeChart) {
+        const sizeChartHTML = sizeChart.outerHTML;
+        document.dispatchEvent(
+          new CustomEvent("size-chart-selected", {
+            detail: { sizeChart: sizeChartHTML },
+          })
+        );
+      } else {
+        console.error("No size chart created from html");
+      }
     } catch (error) {
-      console.error("Error processing captured image:", error);
+      console.error("Error processing:", error);
     }
 
     modal.remove();

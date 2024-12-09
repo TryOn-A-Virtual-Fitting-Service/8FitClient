@@ -16,6 +16,7 @@ import {
 import History from "./History";
 import ModelView from "./ModelView";
 import { fetchHistory } from "@/api/history"; // API 함수 import 추가
+import SizeAnalysis from "./SizeAnalysis";
 
 interface TryOnWidgetProps {
   screenCaptureStart: () => void; // 추가
@@ -106,6 +107,7 @@ const TryOnWidget: React.FC<TryOnWidgetProps> = ({ screenCaptureStart }) => {
       <ModelView />
       <History />
       <TryOnButtonContainer onStartCapture={screenCaptureStart} />
+      <SizeAnalysis />
     </WidgetContainer>
   );
 };
