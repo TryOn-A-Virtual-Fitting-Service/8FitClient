@@ -3,6 +3,7 @@ import { requestSizeAnalysis } from "@/api/size";
 import { useRecoilValue } from "recoil";
 import { currentModelState } from "@/recoil/atoms";
 import { preprocessHtmlString } from "@/utils/htmlProcessor";
+import AiIcon from "@/assets/ai";
 import {
   SizeAnalysisContainer,
   SizeAnalysisTitle,
@@ -54,7 +55,8 @@ const SizeAnalysis = () => {
 
   return (
     <SizeAnalysisContainer>
-      <SizeAnalysisTitle>사이즈 분석</SizeAnalysisTitle>
+      <AiIcon />
+      <SizeAnalysisTitle>옷 사이즈 AI 분석</SizeAnalysisTitle>
       {isLoading ? (
         <LoadingText>분석 중...</LoadingText>
       ) : (
