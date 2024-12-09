@@ -9,6 +9,7 @@ import {
 } from "@/recoil/atoms"; // Recoil state 추가
 import {
   WidgetContainer,
+  WidgetWrapper, // 추가
   Rectangle,
   Title,
   BrandImage,
@@ -98,17 +99,19 @@ const TryOnWidget: React.FC<TryOnWidgetProps> = ({ screenCaptureStart }) => {
   }, [setHistory, setCurrentModel, selectedModel]);
 
   return (
-    <WidgetContainer>
-      <Rectangle $brandColor={brandConfig.primaryColor} />
-      <Title $brandColor={brandConfig.primaryColor}>
-        <BrandImage src={brandConfig.logoUrl} />× 8Fit
-      </Title>
-      <Description>온라인에서도 옷을 직접 입어보세요</Description>
-      <ModelView />
-      <History />
-      <TryOnButtonContainer onStartCapture={screenCaptureStart} />
+    <WidgetWrapper>
+      <WidgetContainer>
+        <Rectangle $brandColor={brandConfig.primaryColor} />
+        <Title $brandColor={brandConfig.primaryColor}>
+          <BrandImage src={brandConfig.logoUrl} />× 8Fit
+        </Title>
+        <Description>온라인에서도 옷을 직접 입어보세요</Description>
+        <ModelView />
+        <History />
+        <TryOnButtonContainer onStartCapture={screenCaptureStart} />
+      </WidgetContainer>
       <SizeAnalysis />
-    </WidgetContainer>
+    </WidgetWrapper>
   );
 };
 

@@ -3,7 +3,12 @@ import { requestSizeAnalysis } from "@/api/size";
 import { useRecoilValue } from "recoil";
 import { currentModelState } from "@/recoil/atoms";
 import { preprocessHtmlString } from "@/utils/htmlProcessor";
-
+import {
+  SizeAnalysisContainer,
+  SizeAnalysisTitle,
+  MessageContainer,
+  LoadingText,
+} from "@styles/TryOnWidget/SizeAnalysis";
 const SizeAnalysis = () => {
   const [sizeChartHTML, setSizeChartHTML] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<string>("");
@@ -48,16 +53,14 @@ const SizeAnalysis = () => {
   if (!sizeChartHTML) return null;
 
   return (
-    <div className="size-analysis-container">
-      <h3>사이즈 분석</h3>
+    <SizeAnalysisContainer>
+      <SizeAnalysisTitle>사이즈 분석</SizeAnalysisTitle>
       {isLoading ? (
-        <div>분석 중...</div>
+        <LoadingText>분석 중...</LoadingText>
       ) : (
-        <div className="message-container">
-          <p>{analysisResult}</p>
-        </div>
+        <MessageContainer>{analysisResult}</MessageContainer>
       )}
-    </div>
+    </SizeAnalysisContainer>
   );
 };
 

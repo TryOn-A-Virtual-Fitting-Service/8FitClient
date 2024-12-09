@@ -83,7 +83,6 @@ widgetStyles.textContent = `
     font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     line-height: 1.5;
     font-weight: 400;
-    margin-bottom: 190px;
   }
   
   #capture-overlay {

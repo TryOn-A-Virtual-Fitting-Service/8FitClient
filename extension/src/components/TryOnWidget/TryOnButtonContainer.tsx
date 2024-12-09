@@ -24,7 +24,7 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isUploading) {
-      setTimer(30);
+      setTimer(40);
       interval = setInterval(() => {
         setTimer((prev) => {
           if (prev <= 0.1) {
@@ -107,7 +107,7 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
       <FileUpload ref={fileInputRef} onFileSelect={handleFileSelect} />
       <StyledButton
         $brandColor={brandConfig.primaryColor}
-        $progress={30 - timer}
+        $progress={40 - timer}
         onClick={onStartCapture}
         disabled={isUploading || !currentModel}
       >

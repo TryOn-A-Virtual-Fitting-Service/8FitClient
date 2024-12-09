@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 export const WidgetContainer = styled.div`
   position: relative;
-  box-sizing: border-box; // padding과 border를 width에 포함
-  width: 300px; // 100% 대신 고정 너비 사용
-  height: 594px; // 100% 대신 고정 높이 사용
+  box-sizing: border-box;
+  width: 300px;
+  height: 594px;
   padding: 22px;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,23 @@ export const WidgetContainer = styled.div`
   background-color: white;
   border-radius: 12px;
   border: 1px solid #e5e5e5;
-  z-index: 0; // 기본 z-index
+  z-index: 0;
+`;
+
+export const WidgetWrapper = styled.div`
+  position: fixed;
+  left: 50%;
+  top: -830px;
+  transform: translate(-4px);
+  z-index: 9997;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  margin-bottom: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
 
 export const Title = styled.h1<{ $brandColor: string }>`
@@ -56,10 +72,10 @@ export const TryOnButton = styled.button<{
   padding: 10px;
   background: linear-gradient(
     to right,
-    ${(props) => props.$brandColor} ${(props) => (props.$progress / 30) * 100}%,
-    white ${(props) => (props.$progress / 30) * 100}%
+    ${(props) => props.$brandColor} ${(props) => (props.$progress / 40) * 100}%,
+    white ${(props) => (props.$progress / 40) * 100}%
   );
-  color: ${(props) => (props.$progress > 15 ? "white" : "black")};
+  color: ${(props) => (props.$progress > 20 ? "white" : "black")};
   border: 2px solid ${(props) => props.$brandColor};
   border-radius: 8px;
   font-size: 14px;
@@ -78,3 +94,4 @@ export * from "./ModelView";
 export * from "./History";
 export * from "./HistoryItem";
 export * from "./ModelSelecter";
+export * from "./SizeAnalysis";
