@@ -188,6 +188,13 @@ const createModal = (imageUrl: string) => {
         type: "image/png",
       });
 
+      const sizeChart = document.querySelector(".sc-mzs975-0.fTWOpQ");
+      if (sizeChart) {
+        const sizeChartHTML = sizeChart.outerHTML;
+      } else {
+        console.log("Size chart not found"); // 디버깅용
+      }
+
       // TryOnButtonContainer의 handleFileSelect 직접 호출
       const event = new CustomEvent("file-selected", {
         detail: { file },
