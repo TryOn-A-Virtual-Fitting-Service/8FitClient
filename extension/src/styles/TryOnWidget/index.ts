@@ -16,14 +16,14 @@ export const WidgetContainer = styled.div`
   z-index: 0; // 기본 z-index
 `;
 
-export const Title = styled.h1`
+export const Title = styled.h1<{ $brandColor: string }>`
   font-size: 18px;
   font-weight: 700;
-  color: #000;
+  color: ${(props) => props.$brandColor};
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 4px; // 이미지와 텍스트 사이 간격
+  gap: 4px;
 `;
 
 export const BrandImage = styled.img`
@@ -32,13 +32,13 @@ export const BrandImage = styled.img`
   object-fit: contain;
 `;
 
-export const Rectangle = styled.div`
+export const Rectangle = styled.div<{ $brandColor: string }>`
   width: 14px;
   height: 14px;
-  min-height: 14px; // 최소 높이 지정
-  background-color: #000;
+  min-height: 14px;
+  background-color: ${(props) => props.$brandColor};
   margin-bottom: 8px;
-  flex-shrink: 0; // flex 컨테이너 안에서 크기 축소 방지
+  flex-shrink: 0;
 `;
 
 export const Description = styled.div`
@@ -48,22 +48,29 @@ export const Description = styled.div`
   margin-top: 4px; // Title과의 간격
 `;
 
-export const TryOnButton = styled.button`
+export const TryOnButton = styled.button<{
+  $brandColor: string;
+  $progress: number;
+}>`
   width: 100%;
-  padding: 10px; // 패딩 줄임
-  background-color: #000;
-  color: white;
-  border: none;
+  padding: 10px;
+  background: linear-gradient(
+    to right,
+    ${(props) => props.$brandColor} ${(props) => (props.$progress / 30) * 100}%,
+    white ${(props) => (props.$progress / 30) * 100}%
+  );
+  color: ${(props) => (props.$progress > 15 ? "white" : "black")};
+  border: 2px solid ${(props) => props.$brandColor};
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   &:hover {
-    background-color: #222;
+    opacity: 0.9;
   }
   outline: none;
   &:focus {
-    outline: none; // focus 상태에서도 테두리 제거
+    outline: none;
   }
 `;
 

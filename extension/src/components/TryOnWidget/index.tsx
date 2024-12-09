@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"; // useEffect 추가
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import TryOnButtonContainer from "./TryOnButtonContainer";
+import { useBrandConfig } from "@/hooks/useBrandConfig";
 import {
   historyState,
   currentModelState,
@@ -23,10 +24,10 @@ interface TryOnWidgetProps {
 }
 
 const TryOnWidget: React.FC<TryOnWidgetProps> = ({ screenCaptureStart }) => {
-  // Recoil setter 추가
   const setHistory = useSetRecoilState(historyState);
   const setCurrentModel = useSetRecoilState(currentModelState);
   const selectedModel = useRecoilValue(selectedModelState);
+  const brandConfig = useBrandConfig();
   // useEffect와 API 호출 로직 추가
   useEffect(() => {
     const loadHistory = async () => {
@@ -96,12 +97,11 @@ const TryOnWidget: React.FC<TryOnWidgetProps> = ({ screenCaptureStart }) => {
     loadHistory();
   }, [setHistory, setCurrentModel, selectedModel]);
 
-  // 나머지 JSX는 동일
   return (
     <WidgetContainer>
-      <Rectangle />
-      <Title>
-        <BrandImage src="https://8fit.xyz/images/brands/musinsa.png" />× 8Fit
+      <Rectangle $brandColor={brandConfig.primaryColor} />
+      <Title $brandColor={brandConfig.primaryColor}>
+        <BrandImage src={brandConfig.logoUrl} />× 8Fit
       </Title>
       <Description>온라인에서도 옷을 직접 입어보세요</Description>
       <ModelView />

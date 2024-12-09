@@ -4,7 +4,7 @@ import { currentModelState, historyState } from "@/recoil/atoms";
 import { requestTryOn } from "@/api/tryOn";
 import FileUpload from "./FileUpload";
 import { TryOnButton as StyledButton } from "@styles/TryOnWidget";
-
+import { useBrandConfig } from "@/hooks/useBrandConfig";
 interface TryOnButtonContainerProps {
   onStartCapture: () => void; // 추가
 }
@@ -16,8 +16,28 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
   const [currentModel, setCurrentModel] = useRecoilState(currentModelState);
   const [history, setHistory] = useRecoilState(historyState);
   const [isUploading, setIsUploading] = useState(false);
+  const brandConfig = useBrandConfig();
+  const [timer, setTimer] = useState(0);
 
   useEffect(() => {}, [currentModel]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isUploading) {
+      setTimer(30);
+      interval = setInterval(() => {
+        setTimer((prev) => {
+          if (prev <= 0.1) {
+            clearInterval(interval);
+            setIsUploading(false);
+            return 30;
+          }
+          return prev - 0.1; // 0.1초 단위로 감소
+        });
+      }, 100); // 100ms 간격으로 업데이트
+    }
+    return () => clearInterval(interval);
+  }, [isUploading]);
 
   useEffect(() => {
     const handleFileSelected = (event: CustomEvent) => {
@@ -68,11 +88,14 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
         setHistory(updatedHistory);
       } else {
         console.error("Try-on request failed:", response.message);
+        setTimer(0);
       }
     } catch (error) {
       console.error("Try-on failed:", error);
+      setTimer(0);
     } finally {
       setIsUploading(false);
+      setTimer(0);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -83,10 +106,12 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
     <>
       <FileUpload ref={fileInputRef} onFileSelect={handleFileSelect} />
       <StyledButton
+        $brandColor={brandConfig.primaryColor}
+        $progress={30 - timer}
         onClick={onStartCapture}
         disabled={isUploading || !currentModel}
       >
-        {isUploading ? "처리중..." : "입어보기"}
+        {isUploading ? "입는 중..." : "입어보기"}
       </StyledButton>
     </>
   );

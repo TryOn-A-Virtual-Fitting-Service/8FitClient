@@ -7,7 +7,11 @@
   "host_permissions": ["<all_urls>"],
   "content_scripts": [
     {
-      "matches": ["https://www.musinsa.com/*"],
+      "matches": [
+        "https://www.musinsa.com/*",
+        "https://zigzag.kr/*",
+        "https://m.a-bly.com/*"
+      ],
       "js": ["content.js"],
       "css": ["styles/fonts.css"]
     }
