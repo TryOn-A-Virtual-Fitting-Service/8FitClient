@@ -6,7 +6,7 @@ import { preprocessHtmlString } from "@/utils/htmlProcessor";
 
 const SizeAnalysis = () => {
   const [sizeChartHTML, setSizeChartHTML] = useState<string | null>(null);
-  const [messages, setMessages] = useState<string[]>([]);
+  const [analysisResult, setAnalysisResult] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const currentModel = useRecoilValue(currentModelState);
 
@@ -18,29 +18,20 @@ const SizeAnalysis = () => {
       setIsLoading(true);
 
       try {
-        // API 호출 및 SSE 연결
-        const eventSource = await requestSizeAnalysis(
+        const response = await requestSizeAnalysis(
           processedHtml,
           import.meta.env.VITE_DEVICE_ID,
           currentModel.id
         );
 
-        eventSource.onmessage = (event) => {
-          if (event.data === "[DONE]") {
-            eventSource.close();
-            setIsLoading(false);
-          } else {
-            setMessages((prev) => [...prev, event.data]);
-          }
-        };
-
-        eventSource.onerror = (error) => {
-          console.error("SSE Error:", error);
-          eventSource.close();
-          setIsLoading(false);
-        };
+        if (response.success) {
+          setAnalysisResult(response.result.sizeChat);
+        } else {
+          console.error("Size analysis failed:", response.message);
+        }
       } catch (error) {
         console.error("Size analysis error:", error);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -62,10 +53,8 @@ const SizeAnalysis = () => {
       {isLoading ? (
         <div>분석 중...</div>
       ) : (
-        <div className="messages-container">
-          {messages.map((msg, index) => (
-            <p key={index}>{msg}</p>
-          ))}
+        <div className="message-container">
+          <p>{analysisResult}</p>
         </div>
       )}
     </div>

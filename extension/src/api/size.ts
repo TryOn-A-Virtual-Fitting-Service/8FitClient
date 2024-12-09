@@ -1,22 +1,31 @@
 import axios from "axios";
+import { ApiResponse } from "@/types";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+interface SizeAnalysisResult {
+  sizeChat: string;
+}
+
 export const requestSizeAnalysis = async (
   content: string,
-  deviceId: string,
+  deviceId: string = import.meta.env.VITE_DEVICE_ID,
   modelId: number
-): Promise<EventSource> => {
-  // 초기 POST 요청
-  await axios.post(`${API_URL}/chat/size`, {
-    content,
-    deviceId,
-    modelId,
-  });
-
-  // SSE 연결 설정
-  const eventSource = new EventSource(`${API_URL}/api/v1/chat/size`, {
-    withCredentials: true,
-  });
-  return eventSource;
+): Promise<ApiResponse<SizeAnalysisResult>> => {
+  try {
+    const response = await axios.post<ApiResponse<SizeAnalysisResult>>(
+      `${API_URL}/chat/size`,
+      {
+        content,
+        deviceId,
+        modelId,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Size analysis error:", error);
+    throw error;
+  }
 };
+
+export type { SizeAnalysisResult };

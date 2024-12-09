@@ -30,7 +30,7 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
           if (prev <= 0.1) {
             clearInterval(interval);
             setIsUploading(false);
-            return 30;
+            return 0;
           }
           return prev - 0.1; // 0.1초 단위로 감소
         });
