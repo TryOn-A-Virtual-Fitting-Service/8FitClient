@@ -191,17 +191,21 @@ const createModal = (imageUrl: string) => {
       const sizeChart = document.querySelector(".sc-mzs975-0.fTWOpQ");
       if (sizeChart) {
         const sizeChartHTML = sizeChart.outerHTML;
-      } else {
-        console.log("Size chart not found"); // 디버깅용
-      }
+        // 두 개의 이벤트를 순차적으로 발생
+        document.dispatchEvent(
+          new CustomEvent("file-selected", {
+            detail: { file },
+          })
+        );
 
-      // TryOnButtonContainer의 handleFileSelect 직접 호출
-      const event = new CustomEvent("file-selected", {
-        detail: { file },
-      });
-      document.dispatchEvent(event);
+        document.dispatchEvent(
+          new CustomEvent("size-chart-selected", {
+            detail: { sizeChart: sizeChartHTML },
+          })
+        );
+      }
     } catch (error) {
-      console.error("Error processing captured image:", error);
+      console.error("Error processing:", error);
     }
 
     modal.remove();

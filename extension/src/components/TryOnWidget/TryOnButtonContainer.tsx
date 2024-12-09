@@ -17,9 +17,7 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
   const [history, setHistory] = useRecoilState(historyState);
   const [isUploading, setIsUploading] = useState(false);
 
-  useEffect(() => {
-    console.log("TryOnButtonContainer - Current Model:", currentModel);
-  }, [currentModel]);
+  useEffect(() => {}, [currentModel]);
 
   useEffect(() => {
     const handleFileSelected = (event: CustomEvent) => {
@@ -46,9 +44,6 @@ const TryOnButtonContainer: React.FC<TryOnButtonContainerProps> = ({
         console.error("No model selected");
         return;
       }
-
-      console.log("Current Model before request:", currentModel); // 추가
-      console.log("Current Model ID:", currentModel.id);
 
       setIsUploading(true);
 
