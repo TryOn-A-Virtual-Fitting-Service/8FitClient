@@ -1,7 +1,7 @@
 import React, { useRef } from "react"; // useRef 추가
 import { useRecoilState } from "recoil";
 import { historyState, currentModelState } from "@/recoil/atoms";
-import { requestAddModel } from "@/api/model"; // API 함수 import
+import { requestAddModel, requestDefaultModel } from "@/api/model"; // API 함수 import
 import FileUpload from "./FileUpload"; // FileUpload 컴포넌트 import
 import {
   SelectorContainer,
@@ -26,39 +26,34 @@ const ModelSelector: React.FC = () => {
         return;
       }
 
-      // 로컬 이미지 URL 사용
-      const imageUrl =
-        modelType === "male"
-          ? "https://8fit.xyz/images/models/default-male.png"
-          : "https://8fit.xyz/images/models/default-female.png";
+      // 기본 모델 API 호출
+      const response = await requestDefaultModel(
+        import.meta.env.VITE_DEVICE_ID,
+        modelType as "male" | "female"
+      );
 
-      // 먼저 UI 업데이트
-      const newModel = {
-        id: Date.now(),
-        modelImageUrl: imageUrl,
-        fittings: [
-          {
-            // fittings 배열 추가
-            fittingId: Date.now(),
-            fittingImageUrl: "",
-            itemImageUrl: imageUrl,
-          },
-        ],
-      };
+      console.log("API 응답 전체:", response);
+      console.log("response.result:", response.result);
+      console.log("modelId:", response.result.modelId);
+      console.log("modelUrl:", response.result.modelUrl);
 
-      setHistory([newModel, ...history]);
-      setCurrentModel(newModel);
-      setIsOpen(false);
+      if (response.success) {
+        const newModel: ModelItem = {
+          id: response.result.modelId,
+          modelImageUrl: response.result.modelUrl,
+          fittings: [],
+        };
+        console.log("생성된 newModel:", newModel);
 
-      // 백그라운드에서 서버에 알림
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const modelImage = new File([blob], "model.png", { type: "image/png" });
-
-      await requestAddModel(import.meta.env.VITE_DEVICE_ID, modelImage);
+        setHistory([newModel, ...history]);
+        setCurrentModel(newModel);
+      } else {
+        console.error("Failed to add default model:", response.message);
+      }
     } catch (error) {
       console.error("Failed to add model:", error);
     }
+    setIsOpen(false);
   };
 
   // 내 사진 업로드 시에는 서버 응답 URL 사용

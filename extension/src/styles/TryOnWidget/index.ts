@@ -19,7 +19,7 @@ export const WidgetContainer = styled.div`
 export const WidgetWrapper = styled.div`
   position: fixed;
   left: 50%;
-  top: -830px;
+  top: -840px;
   transform: translate(-4px);
   z-index: 9997;
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,

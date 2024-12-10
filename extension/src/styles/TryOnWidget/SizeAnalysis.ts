@@ -1,4 +1,34 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const gradientAnimation = keyframes`
+  0% {
+    color: #0051BC;
+  }
+  50% {
+    color: #2B7FFF;
+  }
+  100% {
+    color: #0051BC;
+  }
+`;
+
+export const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  flex-direction: row;
+`;
+
+export const StyledAiIcon = styled.div`
+  display: flex;
+  align-items: center;
+  svg {
+    path {
+      animation: ${gradientAnimation} 2s ease-in-out infinite;
+      fill: currentColor;
+    }
+  }
+`;
 
 export const SizeAnalysisContainer = styled.div`
   width: 300px; // 위젯과 동일한 너비
@@ -16,8 +46,8 @@ export const SizeAnalysisContainer = styled.div`
 export const SizeAnalysisTitle = styled.h3`
   font-size: 14px;
   font-weight: 500;
-  color: #0051bc;
   margin: 0;
+  animation: ${gradientAnimation} 1.5s ease-in-out infinite;
 `;
 
 export const MessageContainer = styled.div`

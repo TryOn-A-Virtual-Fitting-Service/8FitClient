@@ -9,12 +9,34 @@ import {
   SizeAnalysisTitle,
   MessageContainer,
   LoadingText,
+  StyledAiIcon,
+  TitleContainer,
 } from "@styles/TryOnWidget/SizeAnalysis";
 const SizeAnalysis = () => {
   const [sizeChartHTML, setSizeChartHTML] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const currentModel = useRecoilValue(currentModelState);
+  const [displayedText, setDisplayedText] = useState<string>("");
+
+  useEffect(() => {
+    if (!analysisResult || isLoading) return;
+
+    const text = analysisResult;
+    const totalLength = text.length;
+    let currentIndex = 0;
+
+    const typingInterval = setInterval(() => {
+      if (currentIndex < totalLength) {
+        setDisplayedText(text.slice(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, 30);
+
+    return () => clearInterval(typingInterval);
+  }, [analysisResult, isLoading]);
 
   useEffect(() => {
     const handleSizeChart = async (event: CustomEvent) => {
@@ -55,12 +77,16 @@ const SizeAnalysis = () => {
 
   return (
     <SizeAnalysisContainer>
-      <AiIcon />
-      <SizeAnalysisTitle>옷 사이즈 AI 분석</SizeAnalysisTitle>
+      <TitleContainer>
+        <StyledAiIcon>
+          <AiIcon />
+        </StyledAiIcon>
+        <SizeAnalysisTitle>옷 사이즈 AI 분석</SizeAnalysisTitle>
+      </TitleContainer>
       {isLoading ? (
         <LoadingText>분석 중...</LoadingText>
       ) : (
-        <MessageContainer>{analysisResult}</MessageContainer>
+        <MessageContainer>{displayedText}</MessageContainer>
       )}
     </SizeAnalysisContainer>
   );
